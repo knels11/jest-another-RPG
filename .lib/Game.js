@@ -96,4 +96,12 @@ Game.prototype.battle = function() {
     //}
 };
 
+Game.prototype.checkEndofBattle = function() {
+//player uses a potion
+//player attempts to use a potion but has empty inventory
+//player attacks the enemy
+//enemy attacks the player
+};
+
+
 module.exports = Game;
