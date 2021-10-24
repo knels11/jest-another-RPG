@@ -46,7 +46,7 @@ Game.prototype.startNewBattle = function() {
     console.log(this.currentEnemy.getDescription());
 
 //responsible for each individual turn in the round
-    this.startNewBattle(); 
+    this.battle(); 
 };
 
 Game.prototype.battle = function() {
@@ -80,20 +80,20 @@ Game.prototype.battle = function() {
                     console.log(`You used a ${potionDetails[1]} potion.`);
                 });
 
-            }else {
+            } else {
                 const damage = this.player.getAttackValue();
                 this.currentEnemy.reduceHealth(damage);
                 console.log(`You attacked the ${this.currentEnemy.name}`);
                 console.log(this.currentEnemy.getHealth());
-            } 
+            }            
         });
     } 
-    //else {
-      //  const damage = this.currentEnemy.getAttackValue();
-        //this.player.reduceHealth(damage);
-        //console.log(`You were attacked by the ${this.currentEnemy.name}`);
-        //console.log(this.player.getHealth());
-    //}
+    else {
+        const damage = this.currentEnemy.getAttackValue();
+        this.player.reduceHealth(damage);
+        console.log(`You were attacked by the ${this.currentEnemy.name}`);
+        console.log(this.player.getHealth());
+    }
 };
 
 Game.prototype.checkEndofBattle = function() {
