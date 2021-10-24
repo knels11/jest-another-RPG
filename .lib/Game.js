@@ -63,6 +63,8 @@ Game.prototype.battle = function() {
             if (action === 'Use potion') {
                 //follow up prompt here
                 if (!this.player.getInventory()) {
+                    //after player sees their empty inventory
+                    return this.checkEndofBattle();
                     console.log("you dont have any potions!");
                     return;
                 }
@@ -78,13 +80,18 @@ Game.prototype.battle = function() {
 
                     this.player.usePotion(potionDetails[0] - 1);
                     console.log(`You used a ${potionDetails[1]} potion.`);
+                    //after player uses a potion
+                    this.checkEndofBattle();
                 });
 
             } else {
+                //after enemy attacks
                 const damage = this.player.getAttackValue();
                 this.currentEnemy.reduceHealth(damage);
                 console.log(`You attacked the ${this.currentEnemy.name}`);
                 console.log(this.currentEnemy.getHealth());
+
+                this.checkEndofBattle();
             }            
         });
     } 
@@ -97,6 +104,28 @@ Game.prototype.battle = function() {
 };
 
 Game.prototype.checkEndofBattle = function() {
+//verify if both characters are alive and can continue fighting
+if (this.player.isAlive() && this.currentEnemy.isAlive()) {
+    this.isPlayerTurn = !this.isPlayerTurn;
+    this.battle();
+} else if (this.player.isAlive() && !this.currentEnemy.isAlive()) {
+    console.log(`You've defeated the ${this.currentEnemy.name}`);
+
+    this.player.addPotion(this.currentEnemy.potion);
+    console.log(`${this.player.name} found a ${this.currentEnemy.potion.name} potion`);
+    this.roundNumber++;
+
+    if (this.roundNumber < this.enemies.length) {
+        this.currentEnemy = this.enemies[this.roundNumber];
+        this.startNewBattle();
+    } else {
+        console.log('You win!');
+    }
+    //the player might've been defeated which'll mark the end of the game
+} else {
+    console.log('Youve been defeated!');
+}
+
 //player uses a potion
 //player attempts to use a potion but has empty inventory
 //player attacks the enemy
